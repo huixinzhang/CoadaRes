@@ -1,0 +1,32 @@
+%%
+clear all
+
+
+runs     = 1;
+networks = dir('../source_data/foodWebs/*.mat');
+%ids = [3,4,7,6,9];
+ids = [1:7 3];
+%%
+% 3, 4, 7, 6, 9
+for j = 1 : numel(ids)
+    i = ids(j);
+    % load network data
+    %filename = strcat(networks(i).folder, '/', networks(i).name);
+    filename = strcat('../source_data/', '/', networks(i).name);
+    load(filename);
+    tmp = strsplit(networks(i).name, '.');
+    networkName = tmp{1};
+
+    for k = 7 : 7
+        tic
+        flowerName = strcat('../Results_Static_SE_DE_SEDE/foodWebs/',networkName,'_flower_repeat',num2str(k));
+        beeName = strcat('../Results_Static_SE_DE_SEDE/foodWebs/',networkName,'_bee_repeat',num2str(k));  
+
+        [flower, bee] = perturb(M, runs, networkName);
+        save(flowerName, 'flower');
+        save(beeName,'bee');
+        clear flower bee
+        toc
+    end
+    
+end
